@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Press_Start_2P } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 const pressStart2P = Press_Start_2P({
   weight: "400",
@@ -21,7 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pressStart2P.variable} antialiased`}>
-        {children}
+        <NotificationProvider>
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
+        </NotificationProvider>
       </body>
     </html>
   );
