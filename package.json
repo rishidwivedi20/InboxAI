@@ -15,7 +15,7 @@
     "@types/nodemailer": "^6.4.17",
     "dotenv": "^17.2.1",
     "groq-sdk": "^0.29.0",
-    "inngest": "^3.40.1",
+    "inngest": "^4.11.0",
     "marked": "^16.1.2",
     "next": "15.4.5",
     "nodemailer": "^7.0.5",

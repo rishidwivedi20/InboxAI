@@ -6,8 +6,7 @@ import { sendEmail } from "@/lib/email";
 import { createClient } from "@/lib/server";
 
 export const scheduledNewsletterFunction = inngest.createFunction(
-  { id: "newsletter/scheduled" },
-  { event: "newsletter.schedule" },
+  { id: "newsletter/scheduled", triggers: [{ event: "newsletter.schedule" }] },
   async ({ event, step, runId }) => {
     if (!event.data.isImmediate && !event.data.isScheduled) {
       const isUserActive = await step.run("check-user-status", async () => {
