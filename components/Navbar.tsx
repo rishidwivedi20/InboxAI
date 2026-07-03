@@ -2,7 +2,6 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
@@ -22,15 +21,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="InboxAI"
-              width={120}
-              height={40}
-              className="pixelated cursor-pointer"
-              style={{ imageRendering: "pixelated" }}
+            <span
               onClick={() => router.push("/dashboard")}
-            />
+              className="text-xl cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ fontFamily: "Press Start 2P" }}
+            >
+              InboxAI
+            </span>
           </div>
 
           <div className="flex items-center space-x-6">
