@@ -11,7 +11,7 @@
   </div>
 
   <h3 align="center">InboxAI - AI-Powered Newsletter SaaS with Next.js, Supabase & Groq</h3>
-  <img src="public/Screenshot 2025-08-06 000305.png" alt="demo" />
+  <img src="public/dashboard.png" alt="demo" />
 
 </div>
 
