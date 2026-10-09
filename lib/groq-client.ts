@@ -1,8 +1,14 @@
 import Groq from "groq-sdk";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Created lazily so builds (and imports) don't fail when GROQ_API_KEY is unset.
+let groqClient: Groq | null = null;
+
+function getGroq() {
+  if (!groqClient) {
+    groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  }
+  return groqClient;
+}
 
 export async function generateNewsletterSummary(
   articles: any[],
@@ -25,7 +31,7 @@ export async function generateNewsletterSummary(
   }
 
   try {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         {
           role: "system",
@@ -69,7 +75,7 @@ OUTPUT SHAPE EXAMPLE (use this structure, no extra text):
 </ul>`,
         },
       ],
-      model: "llama-3.1-8b-instant",
+      model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
       temperature: 0.7,
       max_tokens: 2000,
     });
@@ -136,4 +142,4 @@ function generateFallbackNewsletter(articles: any[], categories: string[]) {
   return content;
 }
 
-export { groq };
+export { getGroq };

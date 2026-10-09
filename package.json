@@ -9,28 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emailjs/nodejs": "^5.0.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.53.0",
-    "@types/nodemailer": "^6.4.17",
-    "dotenv": "^17.2.1",
     "groq-sdk": "^0.29.0",
     "inngest": "^4.11.0",
     "marked": "^16.1.2",
-    "next": "15.4.10",
-    "nodemailer": "^7.0.5",
+    "next": "^15.5.27",
+    "nodemailer": "^10.0.16",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "resend": "^4.8.0"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.4.5",
+    "eslint-config-next": "^15.5.27",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
