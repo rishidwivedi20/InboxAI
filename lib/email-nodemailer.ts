@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer, { type SendMailOptions } from "nodemailer";
 
 // Create transporter using Gmail
 const createTransporter = () => {
@@ -95,7 +95,7 @@ export async function sendEmailNodemailer(
 
     const transporter = createTransporter();
 
-    const mailOptions: nodemailer.SendMailOptions = {
+    const mailOptions: SendMailOptions = {
       from: `"InboxAI" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: `Your ${categories} newsletter – ${dateStr}`,

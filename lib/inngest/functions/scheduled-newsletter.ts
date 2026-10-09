@@ -3,14 +3,14 @@ import { fetchArticles } from "@/lib/news";
 import { generateNewsletterSummary } from "@/lib/groq-client";
 import { marked } from "marked";
 import { sendEmail } from "@/lib/email";
-import { createClient } from "@/lib/server";
+import { createAdminClient } from "@/lib/admin";
 
 export const scheduledNewsletterFunction = inngest.createFunction(
   { id: "newsletter/scheduled", triggers: [{ event: "newsletter.schedule" }] },
   async ({ event, step, runId }) => {
     if (!event.data.isImmediate && !event.data.isScheduled) {
       const isUserActive = await step.run("check-user-status", async () => {
-        const supabase = await createClient();
+        const supabase = createAdminClient();
 
         const { data: preferences, error } = await supabase
           .from("user_preferences")
@@ -127,7 +127,7 @@ export const scheduledNewsletterFunction = inngest.createFunction(
       event.data.frequency
     ) {
       await step.run("schedule-next", async () => {
-        const supabase = await createClient();
+        const supabase = createAdminClient();
 
         // Get user preferences for send time
         const { data: preferences, error } = await supabase

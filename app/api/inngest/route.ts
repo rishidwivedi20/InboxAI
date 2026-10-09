@@ -14,8 +14,8 @@ console.log(
   process.env.INNGEST_EVENT_KEY ? "✓ Present" : "✗ Missing"
 );
 console.log(
-  "- RESEND_API_KEY:",
-  process.env.RESEND_API_KEY ? "✓ Present" : "✗ Missing"
+  "- SUPABASE_SERVICE_ROLE_KEY:",
+  process.env.SUPABASE_SERVICE_ROLE_KEY ? "✓ Present" : "✗ Missing"
 );
 console.log(
   "Function details:",

@@ -20,6 +20,7 @@
 1. 🤖 [Introduction](#introduction)
 2. ⚙️ [Tech Stack](#tech-stack)
 3. 🔋 [Features](#features)
+4. 🚀 [Getting Started](#getting-started)
 
 ## <a name="introduction">🤖 Introduction</a>
 
@@ -70,3 +71,36 @@ InboxAI is a sophisticated SaaS platform that automates the creation and deliver
 👉 **Fallback Mechanisms**: Intelligent content generation fallbacks ensuring reliable newsletter delivery even when AI services are unavailable.
 
 and many more, including scalable architecture, code reusability, and production-ready deployment patterns.
+
+## <a name="getting-started">🚀 Getting Started</a>
+
+**Prerequisites:** Node.js 20+, plus free accounts on [Supabase](https://supabase.com), [Groq](https://console.groq.com), [NewsAPI](https://newsapi.org) and a Gmail account with an [App Password](https://myaccount.google.com/apppasswords).
+
+1. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment** – copy `.env.example` to `.env.local` and fill in the keys.
+
+3. **Set up the database** – in the Supabase dashboard, open the SQL editor and run [`supabase/schema.sql`](supabase/schema.sql). Under *Authentication → URL Configuration*, add `http://localhost:3000` (and your production URL) to the redirect URLs.
+
+4. **Run the app and the Inngest dev server** (two terminals)
+
+   ```bash
+   npm run dev
+   ```
+
+   ```bash
+   npx inngest-cli@latest dev -u http://localhost:3000/api/inngest
+   ```
+
+   Open http://localhost:3000. The Inngest dashboard at http://localhost:8288 shows newsletter runs.
+
+### Deploying (Vercel)
+
+1. Import the repo in Vercel and add every variable from `.env.example`.
+2. Install the [Inngest Vercel integration](https://www.inngest.com/docs/deploy/vercel) (or set `INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY` manually) and sync the app at `https://<your-domain>/api/inngest`.
+3. Add your production URL to Supabase's redirect URLs.
+
