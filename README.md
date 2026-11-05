@@ -21,10 +21,11 @@
 2. ⚙️ [Tech Stack](#tech-stack)
 3. 🔋 [Features](#features)
 4. 🚀 [Getting Started](#getting-started)
+5. 🧭 [Known Limitations & Roadmap](#-known-limitations--roadmap)
 
 ## <a name="introduction">🤖 Introduction</a>
 
-InboxAI is a sophisticated SaaS platform that automates the creation and delivery of personalized newsletters using artificial intelligence. Built from scratch with Next.js, Supabase, and Groq AI, it features secure user authentication, intelligent content curation, and automated scheduling. InboxAI enables users to receive AI-generated newsletters tailored to their interests, powered by advanced workflow orchestration and real-time data processing.
+InboxAI is a sophisticated SaaS platform that automates the creation and delivery of personalized newsletters using artificial intelligence. Built from scratch with Next.js, Supabase, and Groq AI, it features secure user authentication, intelligent content curation, and automated scheduling. InboxAI enables users to receive AI-generated newsletters tailored to their chosen categories, powered by durable background workflows.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
@@ -40,37 +41,44 @@ InboxAI is a sophisticated SaaS platform that automates the creation and deliver
 
 - **[TypeScript](https://www.typescriptlang.org/)** is a superset of JavaScript that adds static typing, providing better tooling, code quality, and error detection for developers, making it ideal for building large-scale applications.
 
-- **[Nodemailer](https://nodemailer.com/)** is a modern email API service built for developers, providing reliable transactional email delivery with superior deliverability, real-time analytics, and comprehensive template management.
+- **[Nodemailer](https://nodemailer.com/)** is a Node.js library for sending email over SMTP. InboxAI uses it with a Gmail account (App Password) to deliver the newsletters.
 
 - **[NewsAPI](https://newsapi.org/)** is a comprehensive news aggregation service that provides real-time access to news articles from thousands of sources worldwide, enabling dynamic content curation.
 
 ## <a name="features">🔋 Features</a>
 
-👉 **AI-Powered Content Generation**: Advanced newsletter creation using Groq AI's LLaMA models to transform news articles into engaging, personalized content with contextual analysis and sentiment optimization.
+👉 **AI-Powered Content Generation**: Groq-hosted LLaMA models (default `llama-3.1-8b-instant`, configurable via `GROQ_MODEL`) turn fetched news items into a concise HTML digest, grouped by category with a short summary under each linked headline.
 
-👉 **Intelligent Category Selection**: Dynamic content curation system supporting 8 distinct news verticals (Technology, Business, Sports, Entertainment, Science, Health, Politics, Environment) with smart filtering.
+👉 **Category Selection**: Choose from 8 news verticals (Technology, Business, Sports, Entertainment, Science, Health, Politics, Environment). Each category uses a tuned NewsAPI query with keyword exclusions and a list of trusted source domains.
 
-👉 **Automated Scheduling System**: Sophisticated scheduling engine supporting multiple delivery frequencies (daily, weekly, bi-weekly) with timezone-aware delivery and user preference management.
+👉 **Automated Scheduling**: Daily, weekly or bi-weekly delivery at a chosen send time. Each send schedules the next one through Inngest. Send times are currently interpreted in server time (UTC on Vercel); per-user timezones are on the roadmap.
 
-👉 **Durable Workflow Management**: Built with Inngest's reliable execution framework featuring automatic retries, error handling, and comprehensive monitoring for mission-critical newsletter delivery.
+👉 **Durable Workflow Management**: Newsletter generation runs as an Inngest function split into steps (check status, fetch news, summarize, render, send, schedule next), so failures retry from the failed step. Runs can be inspected in the Inngest dashboard.
 
-👉 **User Authentication & Management**: Secure Supabase authentication with granular preference controls, subscription management, and real-time status updates.
+👉 **Authentication & Preferences**: Supabase authentication with per-user preferences (categories, frequency, send time, email address) and the ability to pause or resume a newsletter.
 
-👉 **Real-time Dashboard**: Interactive control panel with live newsletter management, scheduling controls, preference updates, and comprehensive usage analytics.
+👉 **Dashboard**: View your current preferences, send a newsletter immediately, schedule a one-off send, and pause or resume delivery.
 
-👉 **Professional Email Templates**: Responsive HTML email templates with organized content structure and delivery optimization through Resend integration.
+👉 **Email Delivery**: Responsive, table-based HTML email template with a plain-text alternative and a `List-Unsubscribe` header, sent through Nodemailer over Gmail SMTP.
 
 👉 **Modern UI/UX**: Custom retro-gaming aesthetic using Press Start 2P typography, pixelated components, and responsive layouts optimized for accessibility.
 
-👉 **Database Security**: Advanced PostgreSQL implementation with Row Level Security (RLS), optimized indexing, and automated timestamp management.
+👉 **Database Security**: PostgreSQL on Supabase with Row Level Security policies on `user_preferences` (users can only read and write their own row), an index on `is_active`, and an `updated_at` trigger. Background jobs use a server-only service-role client.
 
-👉 **Background Job Processing**: Robust workflow orchestration with Inngest handling newsletter generation, scheduling, and delivery with fault tolerance.
+👉 **Responsive UI**: Retro-gaming look built with Tailwind and the Press Start 2P font, usable on desktop and mobile.
 
-👉 **Cross-Device Compatibility**: Fully responsive design that works seamlessly across all devices with consistent user experience.
+👉 **Fallback Mechanisms**: If NewsAPI is rate-limited or returns nothing, the app retries with simpler queries and then top-headlines, and finally uses built-in fallback content. If Groq is unavailable or returns empty output, a plain digest is built from the raw article titles and descriptions, so a newsletter is still delivered.
 
-👉 **Fallback Mechanisms**: Intelligent content generation fallbacks ensuring reliable newsletter delivery even when AI services are unavailable.
+👉 **Keep-alive Cron**: A daily Vercel Cron call to `/api/keep-alive` (protected by `CRON_SECRET`) keeps the free-tier Supabase project from being paused.
 
-and many more, including scalable architecture, code reusability, and production-ready deployment patterns.
+## 🧭 Known Limitations & Roadmap
+
+- Per-user timezone support (send times are currently server time).
+- Idempotency / de-duplication so re-saving preferences or pause/resume can never create overlapping schedules.
+- Pass article descriptions to the model so summaries are grounded in more than the headline.
+- Fetch and summarize once per category and reuse it across users to cut NewsAPI and Groq usage.
+- A one-click unsubscribe flow and an email provider built for volume (Gmail SMTP has daily sending limits).
+- Open and click analytics.
 
 ## <a name="getting-started">🚀 Getting Started</a>
 
